@@ -1,24 +1,16 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import Nav from "components/Nav/Nav";
-import Cart from "components/Cart/Cart";
-import Main from "components/Main/Main";
-import Item from "components/Item/Item";
-import data from "MOCK_DATA.json";
+import Nav from "./components/Nav/Nav";
+import Cart from "./components/Cart/Cart";
+import Main from "./components/Main/Main";
+import Item from "./components/Item/Item";
+
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      products: data
-    };
-    this.renderFoodDetail = this.renderFoodDetail.bind(this);
-
-  };
 
   //제품을 map함수를 이용해 렌더링한다.
   renderFoodDetail() {
-    return this.state.products.map(product => {
+    return this.props.products.map(product => {
       return (
         <Route
           exact
@@ -26,6 +18,8 @@ class App extends Component {
           render={props => {
             return (
               <Item
+                addToCart={this.props.handleAddToCart}
+                productQuantity={this.props.quantity}
                 image={product.image}
                 name={product.name}
                 price={product.price}
@@ -38,6 +32,7 @@ class App extends Component {
       );
     });
   }
+
   render() {
     return (
       <div>
@@ -49,7 +44,19 @@ class App extends Component {
             render={props => {
               return (
                 <Main
-                  products={this.state.products}
+                  products={this.props.products}
+                />
+              );
+            }}
+          />
+          <Route
+            exact
+            path="/cart"
+            render={props => {
+              return (
+                <Cart
+                  cart={this.props.cart}
+                  totalAmount={this.props.totalAmount}
                 />
               );
             }}
